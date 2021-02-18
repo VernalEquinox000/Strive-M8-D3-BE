@@ -12,6 +12,7 @@ const authenticate = async author => {
         //after definition 
         const newRefreshToken = await generateRefreshJWT({ _id: author._id })
         console.log(newRefreshToken)
+        console.log(author.refreshTokens)
         author.refreshTokens = author.refreshTokens.concat({ token: newRefreshToken })
         await author.save()
         

@@ -41,6 +41,7 @@ authorsRouter.get("/", authorize, async (req, res, next) => {
     try {
         console.log(req.author) 
         const authors = await AuthorsModel.find()
+        res.send(authors)
         
     } catch (error) {
         console.log(error)
@@ -51,7 +52,7 @@ authorsRouter.get("/", authorize, async (req, res, next) => {
 
 authorsRouter.get("/me", authorize, async (req, res, next) => {
     try {
-        res.send(req.author)
+        res.send(req.user)
         
     } catch (error) {
         console.log(error)
@@ -64,8 +65,8 @@ authorsRouter.get("/me", authorize, async (req, res, next) => {
 authorsRouter.put("/me", authorize, async (req, res, next) => {
     try {
         const udpates = Object.keys(req.body)
-        udpates.forEach(update => (req.author[update] = req.body[update]))
-        await req.author.save()
+        udpates.forEach(update => (req.user[update] = req.body[update]))
+        await req.user.save()
 
 
 
@@ -82,7 +83,7 @@ authorsRouter.put("/me", authorize, async (req, res, next) => {
 authorsRouter.delete("/me", authorize, async (req, res, next) => {
     try {
         
-        await req.author.deleteOne(res.sendDate("deleted"))
+        await req.user.deleteOne(res.send("deleted"))
         
     } catch (error) {
         console.log(error)
@@ -94,7 +95,7 @@ authorsRouter.delete("/me", authorize, async (req, res, next) => {
 ///LOGOUT
 authorsRouter.post("/logout", async (req, res, next) => {
     try {
-        req.author.refreshTokens = req.author.refreshTokens.filter(t => t.token !== req.body.refreshToken)
+        req.user.refreshTokens = req.user.refreshTokens.filter(t => t.token !== req.body.refreshToken)
         res.send()
         
     } catch (error) {
@@ -105,7 +106,7 @@ authorsRouter.post("/logout", async (req, res, next) => {
 
 
 ///LOGOUTALL
-authorsRouter.post("/login", async (req, res, next) => {
+authorsRouter.post("/logoutAll", async (req, res, next) => {
     try {
         req.author.refreshToken =[]
         await req.author.save()
