@@ -6,7 +6,6 @@ const mongoose = require("mongoose")
 
 const articlesRouter = require("./services/articles")
 const authorsRouter = require("./services/authors")
-const usersRouter = require("./services/users")
 
 
 const {
@@ -30,7 +29,6 @@ server.use(express.json())
 
 server.use("/articles", articlesRouter)
 server.use("/authors", authorsRouter)
-server.use("/users", usersRouter)
 
 // ERROR HANDLERS MIDDLEWARES
 server.use(badRequestHandler)

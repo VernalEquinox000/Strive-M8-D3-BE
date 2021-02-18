@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const UserModel = require("../users/schema")
+const AuthorModel = require("../authors/schema")
 const { verifyJWT } = require("./tools")
 
 const authorize = async (req, res, next) => {
@@ -9,7 +9,7 @@ const authorize = async (req, res, next) => {
 
         const decoded = await verifyJWT(token)
 
-        const user = await UserModel.findOne({ token_id: decoded._id })
+        const user = await AuthorModel.findOne({ token_id: decoded._id })
 
         if (!user) {
             throw new Error(error)
