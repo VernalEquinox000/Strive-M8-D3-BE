@@ -24,8 +24,8 @@ authorsRouter.post("/login", async (req, res, next) => {
     try {
         const {name, password} = req.body
         const author = await AuthorsModel.findByCredentials(name, password)
-/*         const token = await authenticate(author)
-        res.send(token) */
+        const token = await authenticate(author)
+        res.send(token)
                 const tokens = await authenticate(author)
         res.send(tokens)
         
@@ -52,7 +52,7 @@ authorsRouter.get("/", authorize, async (req, res, next) => {
 
 authorsRouter.get("/me", authorize, async (req, res, next) => {
     try {
-        res.send(req.user)
+        res.send(req.author)
         
     } catch (error) {
         console.log(error)
@@ -65,8 +65,8 @@ authorsRouter.get("/me", authorize, async (req, res, next) => {
 authorsRouter.put("/me", authorize, async (req, res, next) => {
     try {
         const udpates = Object.keys(req.body)
-        udpates.forEach(update => (req.user[update] = req.body[update]))
-        await req.user.save()
+        udpates.forEach(update => (req.author[update] = req.body[update]))
+        await req.author.save()
 
 
 
@@ -83,7 +83,7 @@ authorsRouter.put("/me", authorize, async (req, res, next) => {
 authorsRouter.delete("/me", authorize, async (req, res, next) => {
     try {
         
-        await req.user.deleteOne(res.send("deleted"))
+        await req.author.deleteOne(res.send("deleted"))
         
     } catch (error) {
         console.log(error)
@@ -92,10 +92,11 @@ authorsRouter.delete("/me", authorize, async (req, res, next) => {
     }
 })
 
-///LOGOUT
+///LOGOUT need to be updated, not working, same mistake
+///Cannot read property 'refreshTokens' of undefined
 authorsRouter.post("/logout", async (req, res, next) => {
     try {
-        req.user.refreshTokens = req.user.refreshTokens.filter(t => t.token !== req.body.refreshToken)
+        req.author.refreshTokens = req.author.refreshTokens.filter(t => t.token !== req.body.refreshToken)
         res.send()
         
     } catch (error) {

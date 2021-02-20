@@ -2,15 +2,6 @@
 const { Schema, model } = require("mongoose")
 const bcrypt = require("bcryptjs")
 
-
-/* name: {
-        type: String,
-        required:true,
-        },
-    img: {
-        type: String,
-        required:true,
-        } */
 const AuthorSchema = new Schema(
 
     {

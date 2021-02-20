@@ -9,7 +9,7 @@ const authorize = async (req, res, next) => {
 
         const decoded = await verifyJWT(token)
 
-        const user = await AuthorModel.findOne({ _id: decoded._id })
+        const author = await AuthorModel.findOne({ _id: decoded._id })
         console.log(decoded._id)
 
         if (!user) {
@@ -17,7 +17,7 @@ const authorize = async (req, res, next) => {
         }
 
         req.token = token
-        req.user = user
+        req.author = author
         next()
     } catch (e) {
         console.log(e)
