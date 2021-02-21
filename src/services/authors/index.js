@@ -1,8 +1,8 @@
 const express = require("express")
 const { authenticate } = require("../auth/tools")
 
-const { authorize , refreshToken } = require("../auth/middleware")
-
+const { authorize  } = require("../auth/middleware")
+const {refreshToken} = require("../auth/tools")
 const AuthorsModel = require("./schema")
 
 const authorsRouter = express.Router()
@@ -94,10 +94,11 @@ authorsRouter.delete("/me", authorize, async (req, res, next) => {
 
 ///LOGOUT need to be updated, not working, same mistake
 ///Cannot read property 'refreshTokens' of undefined
-authorsRouter.post("/logout", async (req, res, next) => {
+authorsRouter.post("/logout", authorize, async (req, res, next) => {
     try {
+        console.log(req.author)
         req.author.refreshTokens = req.author.refreshTokens.filter(t => t.token !== req.body.refreshToken)
-        res.send()
+        res.send(req.author.refreshTokens)
         
     } catch (error) {
         console.log(error)
@@ -107,7 +108,7 @@ authorsRouter.post("/logout", async (req, res, next) => {
 
 
 ///LOGOUTALL
-authorsRouter.post("/logoutAll", async (req, res, next) => {
+authorsRouter.post("/logoutAll", authorize, async (req, res, next) => {
     try {
         req.author.refreshToken =[]
         await req.author.save()
@@ -123,7 +124,6 @@ authorsRouter.post("/logoutAll", async (req, res, next) => {
 
 ////////refreshtoken
 authorsRouter.post("/refreshToken", async (req, res, next) => {
-    try {
         const oldRefreshToken = req.body.refreshToken
         if (!oldRefreshToken) { 
             const err= new Error("Missing token refresho")
@@ -132,8 +132,7 @@ authorsRouter.post("/refreshToken", async (req, res, next) => {
         } else {
             try {
                 
-                const theseNewTokens = await refreshToken(oldRefreshToken
-                )
+                const theseNewTokens = await refreshToken(oldRefreshToken)
                 res.send(theseNewTokens)
             } catch (error) {
                 console.log(error)
@@ -143,11 +142,6 @@ authorsRouter.post("/refreshToken", async (req, res, next) => {
                 
             }
         }
-         
-    } catch (error) {
-        console.log(error)
-        next(error)
-    }
 })
 
 

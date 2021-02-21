@@ -12,19 +12,18 @@ const authorize = async (req, res, next) => {
         const author = await AuthorModel.findOne({ _id: decoded._id })
         console.log(decoded._id)
 
-        if (!user) {
+        if (!author) {
             throw new Error("Error!")
         }
 
         req.token = token
         req.author = author
         next()
-    } catch (e) {
-        console.log(e)
-        const err = new Error("Autenticaaaa!")
-        //console.log(err)
-        err.httpStatusCode = 401
-        next(err)
+    } catch (error) {
+        /* const err = new Error("Autenticaaaa!")
+        err.httpStatusCode = 401 */
+        console.log(error)
+        next(error)
     }
 }
 
