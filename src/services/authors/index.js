@@ -1,8 +1,6 @@
 const express = require("express")
-const { authenticate } = require("../auth/tools")
-
 const { authorize  } = require("../auth/middleware")
-const {refreshToken} = require("../auth/tools")
+const {authenticate, refreshToken} = require("../auth/tools")
 const AuthorsModel = require("./schema")
 
 const authorsRouter = express.Router()
